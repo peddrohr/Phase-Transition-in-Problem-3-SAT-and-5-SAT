@@ -46,7 +46,7 @@ def solve_instance(clauses):
 
 def main():
     ks = [3, 5]
-    ns = [50, 60]
+    ns = [50, 100, 150]
     num_instances = 10  # Reduced for testing
     results = {}
 
