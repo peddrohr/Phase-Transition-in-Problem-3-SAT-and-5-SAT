@@ -7,7 +7,7 @@ def gerar_clausulas(n: int, m: int, k: int):
     clausulas = []
 
     while len(clausulas) < m:
-        literais = sorted(random.sample(range(1, n+1), k))
+        literais = sorted(random.sample(range(1, n + 1), k))
         clausula = []
 
         for literal in literais:
@@ -36,16 +36,14 @@ def solver_clausulas(clausulas: list[int]):
 
 
 def transicao_fase(alpha_max: float, k: int, variaveis: list[int], instancias: int):
-
     resultados = {n: {"alphas": [], "probabilidades": [], "tempos": []}
                   for n in variaveis}
 
     alpha_inicial = 0.0
 
     while alpha_inicial <= alpha_max:
-
         for n in variaveis:
-            m = alpha_inicial * n
+            m = int(alpha_inicial * n)
             satisfaziveis = 0
             tempo_total = 0.0
 
@@ -64,36 +62,44 @@ def transicao_fase(alpha_max: float, k: int, variaveis: list[int], instancias: i
 
         alpha_inicial = round(alpha_inicial + 0.1, 1)
 
-    for n, dados in resultados.items():
-        gerar_grafico(
-            dados["alphas"], dados["probabilidades"], n,
-            "Probabilidade de Satisfazibilidade Pelo Alpha",
-            "Alpha = m/n", "Probabilidade", f"probabilidade {n}"
-        )
+    gerar_grafico(
+        resultados,
+        "alphas",
+        "probabilidades",
+        "Probabilidade de Satisfazibilidade Pelo Alpha",
+        "Alpha = m/n",
+        "Probabilidade",
+        "probabilidade.png"
+    )
 
-        gerar_grafico(
-            dados["alphas"], dados["tempos"], n,
-            "Tempo Médio de Resolução",
-            "Alpha = m/n", "Tempo (segundos)", f"tempo {n}"
-        )
+    gerar_grafico(
+        resultados,
+        "alphas",
+        "tempos",
+        "Tempo Médio de Resolução",
+        "Alpha = m/n",
+        "Tempo (segundos)",
+        "tempo.png"
+    )
 
 
-def gerar_grafico(x, y, n, title, xlabel, ylabel, name_img):
+def gerar_grafico(resultados, x, y, title, xlabel, ylabel, name_img):
     plt.figure(figsize=(10, 6))
-    plt.plot(x, y, label=f"n = {n}")
+
+    for n, dados in resultados.items():
+        plt.plot(dados[x], dados[y], label=f"n = {n}")
 
     plt.title(title)
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
     plt.grid(True)
     plt.legend()
-    plt.savefig(f"{name_img}.png")
+    plt.savefig(name_img)
     plt.close()
 
 
 k_SAT = [3, 5]
-n = [50, 100, 150, 200]
-n_teste = [10, 20, 30]  # teste
-instancias = 10
+n_teste = [10, 20, 30, 40, 50]  # teste
+instancias = 30
 
-resultados = transicao_fase(10, 3, n_teste, instancias)
+resultados = transicao_fase(10, 5, n_teste, instancias)
