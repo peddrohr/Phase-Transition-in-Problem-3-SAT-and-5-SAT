@@ -7,8 +7,10 @@ def gerarClausula(n, m, k):
     clausulas = []
 
     while len(clausulas) < m:
+
         literal = sorted(random.sample(range(1, n+1), k))
         clausula = []
+
         for valor in literal:
             if random.random() > 0.5:
                 clausula.append(valor)
